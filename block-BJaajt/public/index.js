@@ -2,6 +2,7 @@ const input = document.querySelector("input");
 const img = document.querySelector(".user-img");
 const name = document.querySelector(".name");
 const username = document.querySelector(".username");
+
 const followers = document.querySelectorAll(".followers div img");
 const following = document.querySelectorAll(".following div img");
 const button = document.querySelector("button");
@@ -20,9 +21,10 @@ function displayUI(data) {
 }
 
 function displayFollowers(name) {
+    console.log(name);
     fetch(`https://api.github.com/users/${name}/followers`, function(followersList = data)  {
         
-            let followersArray = [];
+            
             followersArray = followersList.slice(0, 5);
             followersArray.forEach((el, i) => {
                 followers[i].src = el.avatar_url;
@@ -35,8 +37,9 @@ function displayFollowers(name) {
 }
 
 function displayFollowing(name) {
-    fetch(`https://api.github.com/users/${name}/following`, function(followingList = data)  {
-
+    console.log(name);
+    fetch(`https://api.github.com/users/${name}/following`, function(followingList)  {
+            console.log(followingList);
             let followingArray = [];
             followingArray = followingList.slice(0, 5);
             followingArray.forEach((el, i) => {
