@@ -1,0 +1,17 @@
+{
+  "name": "altcampus-assignment",
+  "version": "1.0.0",
+  "description": "",
+  "main": "",
+  "scripts": {
+    "test": "tailwindcss build src/style.css -o public/style.css"
+  },
+  "author": "AltCampus",
+  "license": "GNU GPL V3",
+  "dependencies": {
+    "autoprefixer": "^10.2.6",
+    "jest": "^26.0.1",
+    "postcss": "^8.3.0",
+    "tailwindcss": "^2.1.4"
+  }
+}
