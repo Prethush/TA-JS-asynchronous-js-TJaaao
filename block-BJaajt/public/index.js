@@ -6,72 +6,68 @@ const followers = document.querySelectorAll(".followers div img");
 const following = document.querySelectorAll(".following div img");
 const button = document.querySelector("button");
 const catImg = document.querySelector(".cat-img");
-catImg.style.width = "600px";
-catImg.style.height = "400px";
+catImg.style.width = "700px";
+catImg.style.height = "500px";
 
 function displayUI(data) {
     name.innerText = data.name;
+    img.alt = data.name;
     img.src = data.avatar_url;
     username.innerText = `@${data.login}`;
+    displayFollowers(data.login);
+    displayFollowing(data.login);
+    
 }
 
-function displayFollowers(data) {
-    for(let i = 0; i < 5; i++) {
-        followers[i].src = data[i].avatar_url;
+function displayFollowers(name) {
+    fetch(`https://api.github.com/users/${name}/followers`, function(followersList = data)  {
+        
+            let followersArray = [];
+            followersArray = followersList.slice(0, 5);
+            followersArray.forEach((el, i) => {
+                followers[i].src = el.avatar_url;
+                followers[i].alt = el.name;
+            })
+           
+        
+    });
+    
+}
+
+function displayFollowing(name) {
+    fetch(`https://api.github.com/users/${name}/following`, function(followingList = data)  {
+
+            let followingArray = [];
+            followingArray = followingList.slice(0, 5);
+            followingArray.forEach((el, i) => {
+                following[i].src = el.avatar_url;
+                following[i].alt = el.name;
+            })
+           
+        
+    });
+}
+
+function fetch(url, successHandler) {
+    let xhr = new XMLHttpRequest();
+    xhr.open("GET", url);
+    xhr.onload = () => successHandler(JSON.parse(xhr.response));
+    xhr.onerror =  function() {
+        console.log("Something went wrong");
     }
-}
 
-function displayFollowing(data) {
-    for(let i = 0; i < 5; i++) {
-        following[i].src = data[i].avatar_url;
-    }
+    xhr.send();
 }
-
 
 function handleChange(event) {
-    if(event.keyCode === 13) {
-        let xhr = new XMLHttpRequest();
-        let abc = new XMLHttpRequest();
-        let xyz = new XMLHttpRequest();
-        xhr.open("GET", `https://api.github.com/users/${event.target.value}`);
-        abc.open("GET", `https://api.github.com/users/${event.target.value}/followers`);
-        xyz.open("GET", `https://api.github.com/users/${event.target.value}/following`);
+    if(event.keyCode === 13 && event.target.value) {
+       const url = `https://api.github.com/users/`;
+        // xhr.open("GET", ${event.target.value}`);
+        // abc.open("GET", `https://api.github.com/users/${event.target.value}/followers`);
+        // xyz.open("GET", `https://api.github.com/users/${event.target.value}/following`);
 
-        abc.onload = function() {
-            let followersData = JSON.parse(abc.response);
-            
-            displayFollowers(followersData);
-        }
-        
-        xyz.onload = function() {
-            let followingData = JSON.parse(xyz.response);
-            console.log(followingData);
-            displayFollowing(followingData);
-        }
-
-        xhr.onload = function() {
-            let userData = JSON.parse(xhr.response);
-            
-            displayUI(userData);
-        }
-
+        fetch(url + event.target.value, displayUI)
        
-        xhr.onerror = function() {
-            console.log("Something went wrong");
-        }
-
-        abc.onerror = function() {
-            console.log("Something went wrong");
-        }
-
-        xyz.onerror = function() {
-            console.log("Something went wrong");
-        }
-
-        xhr.send();
-        abc.send();
-        xyz.send();
-
         event.target.value = "";
     }
 
@@ -80,19 +76,10 @@ function handleChange(event) {
 
 
 function handleClick(e) {
-    let xhr = new XMLHttpRequest();
-    xhr.open("GET", `https://api.thecatapi.com/v1/images/search?limit=1&size=full`);
-    xhr.onload = function() {
-        let catArray = JSON.parse(xhr.response);
-        console.log(catArray);
-        catImg.src = catArray[0].url;
-
-    }
-   xhr.onerror = function() {
-       console.log("Something went wrong");
-   }
-
-    xhr.send();
+    fetch(`https://api.thecatapi.com/v1/images/search?limit=1&size=full`, (data) => {
+        catImg.src = data[0].url;
+    })
+    
 }
 
 input.addEventListener("keyup", handleChange);

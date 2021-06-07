@@ -31831,6 +31831,10 @@ video {
   --tw-backdrop-sepia: sepia(100%);
 }
 
+.form-control:focus {
+  border: 2px solid blue;
+}
+
 @media (min-width: 640px) {
   .sm\:container {
     width: 100%;
