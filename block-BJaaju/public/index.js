@@ -15,11 +15,7 @@ function fetch(url, successhandler) {
     
 }
 
-
-
-
-let res = fetch(url)
-.then((images) => {
+function displayImages(images) {
     imgContainer.innerHTML = "";
     images.forEach((image) => {
         let div = document.createElement("div");
@@ -29,26 +25,18 @@ let res = fetch(url)
         div.style.height = "300px";
         imgContainer.append(div);
     })
-})
+}
+
+
+let res = fetch(url)
+.then(displayImages)
 .catch((error) => alert(error));
 
 function handleChange(event) {
     if(event.keyCode === 13 && input.value) {
         fetch(search_url(input.value))
-        .then((data) => {
-            let images = data.results;
-            imgContainer.innerHTML = "";
-            images.forEach((image) => {
-            let div = document.createElement("div");
-            div.classList.add("img-div");
-            div.style.background = `url(${image.urls.small}) center center no-repeat`;
-            div.style.backgroundSize = "cover";
-            div.style.height = "300px";
-            imgContainer.append(div);
-    })
-        })
-
-    .catch((error) => alert(error));
+        .then((serachResult) => displayImages(serachResult.results))
+        .catch((error) => alert(error));
 
         event.target.value = "";
     }
