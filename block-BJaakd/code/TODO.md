@@ -1,19 +1,31 @@
 1. Create a promise. Have it resolve with a value of `Promise Resolved!` in resolve after a delay of 1000ms, using `setTimeout`. Print the contents of the promise after it has been resolved by passing `console.log` to `.then`
 
 ```js
-// Your code
-```
+// `let promise = new Promise((res, rej) => {
+    setTimeout(() => res(`Problem solved`), 1000);
+})
+.then((value) => console.log(value));
+``
 
 2. Create another promise. Now have it reject with a value of `Rejected Promise!` without using `setTimeout`. Print the contents of the promise after it has been rejected by passing console.log to `.catch`
 
 ```js
-// Your code
+// 
+let promise = new Promise((res, rej) => {
+    rej(`Rejected Promise`);
+})
+.catch((error) => console.log(error));
 ```
 
 3. Create another promise. Now have it reject with a value of `Rejected Promise!` without using `setTimeout`. Print the contents of the promise after it has been rejected by passing console.log to `.catch` and also use `.finally` to log message `Promise Settled!`.
 
 ```js
-// Your code
+// 
+let promise = new Promise((res, rej) => {
+    rej(`Rejected promise`);
+})
+.catch((error) => console.log(error))
+.finally(() => console.log("Promise Settled"));
 ```
 
 4. What will be the output of the code below.
@@ -28,12 +40,24 @@ setTimeout(() => console.log('B'), 0); // callback queue
 Promise.resolve().then(() => console.log('C'));
 
 console.log('D');
+
+// 'A'
+'D'
+'C'
+'B'
 ```
 
 5. Write a function named `wait` that accepts `time` in ms returns a promise. The promise gets resolved after given time.
 
 ```js
-// Your code
+// 
+function wait(time) {
+    return new Promise((res, rej) => {
+       setTimeout(() => res("Done"), time);
+    })
+}
+
+let result = wait(5000).then((value) => console.log(value));
 ```
 
 6. Do the following:
@@ -46,7 +70,20 @@ console.log('D');
 - Catch the error using `.catch`
 
 ```js
-// Your code
+// 
+let promise = new Promise((res, rej) => {
+    res(21);
+})
+.then((value) => value + 10)
+.then((value) => value + 100)
+.then((value) => {
+    if(value > 100) {
+        throw new Error("Invalid");
+    }
+})
+.catch((error) => console.log(error));
+
+
 ```
 
 7. Do the following:
@@ -58,7 +95,18 @@ console.log('D');
 - Use `.then` and log the value
 
 ```js
-// Your code
+// 
+
+let promise = new Promise((res, rej) => {
+    res(['A']);
+})
+.then((value) => value.concat('B'))
+.then((value) => value.reduce((acc, curr, index)=> {
+    acc[index] = curr;
+    return acc;
+}, {}))
+.then((value) => console.log(value));
+
 ```
 
 8. Do the following:
@@ -69,7 +117,30 @@ console.log('D');
 - Chain `.then` on above and return `4` also check the value you get access to by logging
 
 ```js
-// Your code
+// 
+
+let first = new Promise((res, rej) => {
+    res(1);
+})
+.then((value) => {
+    
+    console.log(value);
+    return value + 1;
+    
+})
+.then((value) => {
+    
+    console.log(value);
+    return value + 1;
+   
+})
+.then((value) => {
+    
+    console.log(value);
+    return value + 1;
+    
+})
+
 ```
 
 9. Do the following:
@@ -80,10 +151,32 @@ console.log('D');
 - Use `.then` on `first` and return `4` also check the value you get access to by logging
 
 ```js
-// Your code
+// 
+let first = new Promise((res, rej) => {
+    res(1);
+})
+.then((value) => {
+    
+    console.log(value);
+    return value + 1;
+    
+})
+.then((value) => {
+    
+    console.log(value);
+    return value + 1;
+   
+})
+.then((value) => {
+    
+    console.log(value);
+    return value + 1;
+    
+})
 ```
 
 10. Try to understand the difference between the problem 8 and 9. Write your observation.
+-> Using chaining the value returned from one .then will be passed to next so the value get incremented
 
 11. Do the following
 
@@ -94,4 +187,5 @@ console.log('D');
 
 ```js
 // Your code
+
 ```
