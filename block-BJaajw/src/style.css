@@ -11,3 +11,8 @@
 img {
     height: 400px;
 }
+
+.loadng {
+    border-top: 6px solid black;
+    border: 5px solid transparent;
+}
