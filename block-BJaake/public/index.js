@@ -3,8 +3,33 @@ const dropDown = document.querySelector("select");
 const subContainer = document.querySelector(".sub-container");
 const container = document.querySelector(".container");
 
+function displayCategory(data, userData) {
+    
+    data.forEach((news) => {
+        let option = document.createElement("option");
+        option.value = news;
+        option.innerText = news;
+        option.style.padding = "1rem";
+        dropDown.append(option);
+    })
+   
+    dropDown.addEventListener("input", (e) => {
+        handleChange(e, userData);
+    });
+
+}
+
+function handleChange(e, userData) {
+
+   let news = userData.filter((data) => data.newsSite === e.target.value);
+
+    displayUI(news);
+}
+
+
 function displayUI(data) {
     console.log(data);
+    container.innerHTML = "";
     data.forEach((obj) => {
         let subContainer = document.createElement("div");
         subContainer.classList.add("flex", "flex-row", "flex-wrap", "my-8", "justify-between");
@@ -38,5 +63,20 @@ function displayUI(data) {
 
 let result = fetch(`https://spaceflightnewsapi.net/api/v2/articles?_limit=30`)
 .then((res) => res.json())
-.then((userData) => displayUI(userData));
+.then((userData) => {
+    displayUI(userData);
+    return userData;
+})
+.then((userData) => {
+    let arr = [];
+    userData.map((data) => data.newsSite)
+    .forEach((news) => {
+        if(!arr.includes(news)) {
+            arr.push(news);
+        }
+    })
+    displayCategory(arr, userData);
+})
+.catch(console.log);
+
 
