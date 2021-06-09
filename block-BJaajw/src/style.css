@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.flex-45 {
+    flex: 0 1 47%;
+    
+}
+
+img {
+    height: 400px;
+}
