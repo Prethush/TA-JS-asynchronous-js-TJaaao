@@ -31839,6 +31839,11 @@ img {
   height: 400px;
 }
 
+.loadng {
+  border-top: 6px solid black;
+  border: 5px solid transparent;
+}
+
 @media (min-width: 640px) {
   .sm\:container {
     width: 100%;
