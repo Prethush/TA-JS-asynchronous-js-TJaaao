@@ -1,9 +1,16 @@
-
-const dropDown = document.querySelector("select");
+(function () {
+    const dropDown = document.querySelector("select");
 const subContainer = document.querySelector(".sub-container");
 const container = document.querySelector(".container");
-const loading = document.querySelector(".loading");
+const donut = document.querySelector(".donut");
 
+
+function handleSpinner(status = false) {
+    if(status) {
+        container.innerHTML = "<div class='spinner'><div class='donut'></div><div>";
+    }
+    
+}
 function displayCategory(data, userData) {
     
     data.forEach((news) => {
@@ -72,25 +79,32 @@ if(!navigator.onLine) {
     h1.classList.add("text-red-500", "text-center", "text-2xl", "my-8")
     document.body.append(h1);
 }
-fetch(`https://spaceflightnewsapi.net/api/v2/articles?_limit=30`)
+
+function init() {
+    
+    handleSpinner(true);
+    fetch(`https://spaceflightnewsapi.net/api/v2/articles?_limit=30`)
 .then((res) => 
 {
+    if(res.ok) {
+        return res.json();
+    }else {
+        throw new Error("Respnse is not Ok")
+    }
     
-    loading.classList.toggle("hidden");
-    loading.classList.add("visible");
-    return res.json();
+    
 })
 .then((userData) => {
+    handleSpinner();
     displayUI(userData);
     let news = userData.map((data) => data.newsSite);
     news = Array.from(new Set(news));
     displayCategory(news, userData);
     console.log(userData);
 })
-.catch(console.log)
-.finally(() => {
-    loading.classList.toggle("visible");
-    loading.classList.add("hidden");
-})
+.catch(console.log);
 
+}
 
+init();
+})();
