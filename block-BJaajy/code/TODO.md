@@ -45,7 +45,7 @@ then((res) => res.json()).then((data) => data.followers)))
   //let dogs = fetch(`https://random.dog/woof.json`).then((res) => res.json());
 let cats = fetch(`https://aws.random.cat/meow`).then((res) => res.json());
 
-let result = Promise.race([dogs, cats])
+ Promise.race([dogs, cats])
 .then((data) => console.log(data));
 
 
@@ -76,7 +76,7 @@ let result =Promise.allSettled([one, two, three])
 .then((value) => console.log(value));
 
 let result2 = Promise.all([one, two, three])
-.then((value) => console.log(value));
+.then((value) => console.log(value)); //it will give error
 ```
 
 - What will be the output of the following code snippet? How much time will it take for the promise to resolve?
