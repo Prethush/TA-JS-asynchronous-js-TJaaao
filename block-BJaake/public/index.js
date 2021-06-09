@@ -13,16 +13,19 @@ function displayCategory(data, userData) {
         dropDown.append(option);
     })
    
-    dropDown.addEventListener("input", (e) => {
+    dropDown.addEventListener("change", (e) => {
         handleChange(e, userData);
     });
 
 }
 
 function handleChange(e, userData) {
-
-   let news = userData.filter((data) => data.newsSite === e.target.value);
-
+    
+    let news = userData;
+    if(e.target.value) {
+        news = userData.filter((data) => data.newsSite === e.target.value);
+    } 
+    
     displayUI(news);
 }
 
@@ -38,7 +41,7 @@ function displayUI(data) {
         let img = document.createElement("img");
         img.src = obj.imageUrl;
         img.alt = obj.title;
-        img.classList.add("w-full", "object-cover", "object-center", "h-full");
+        img.classList.add("w-full", "object-cover", "object-center");
         box1.append(img);
         let box2 = document.createElement("div");
          box2.classList.add("relative");
@@ -48,7 +51,7 @@ function displayUI(data) {
         h5.classList.add("bg-green-300", "inline-block", "py-1.1", "mt-1", "px-1.5", "rounded-lg", "text-white");
         let title = document.createElement("h2");
         title.innerText = obj.title;
-        title.classList.add("text-3xl", "my-6", "font-bold");
+        title.classList.add("text-3xl", "mt-8", "font-bold");
         let button = document.createElement("a");
         button.innerText = "Read More";
         button.href = obj.url;
@@ -61,21 +64,14 @@ function displayUI(data) {
 
 }
 
-let result = fetch(`https://spaceflightnewsapi.net/api/v2/articles?_limit=30`)
+fetch(`https://spaceflightnewsapi.net/api/v2/articles?_limit=30`)
 .then((res) => res.json())
 .then((userData) => {
     displayUI(userData);
-    return userData;
-})
-.then((userData) => {
-    let arr = [];
-    userData.map((data) => data.newsSite)
-    .forEach((news) => {
-        if(!arr.includes(news)) {
-            arr.push(news);
-        }
-    })
-    displayCategory(arr, userData);
+    let news = userData.map((data) => data.newsSite);
+    news = Array.from(new Set(news));
+    displayCategory(news, userData);
+    console.log(userData)
 })
 .catch(console.log);
 
