@@ -1,12 +1,29 @@
+
 const rootElm = document.querySelector(".todo-container");
 const input = document.querySelector("input");
 const url = `https://sleepy-falls-37563.herokuapp.com/api/todo`;
 
-let data = {"todo": {}};
+
 let isTrue = false;
 
+function handleToggle(id, status) {
+    let data = {
+        todo: {
+            isCompleted: !status,
+        }
+    }
+
+    fetch(url + `/${id}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data),
+    }).then(() => main());
+}
+
+
 function displayUI(datas) {
-    console.log("GGG");
         rootElm.innerHTML = "";
         datas.forEach((todo) => {
             let li = document.createElement("li");
@@ -14,42 +31,18 @@ function displayUI(datas) {
             let input = document.createElement("input");
             input.type = "checkbox";
             input.checked = todo.isCompleted;
+            input.id = todo._id;
             input.addEventListener("click", () => {
-                data.todo.isCompleted = !todo.isCompleted;
-                console.log(data, todo._id);
-                updateTodo(data, todo._id);
-            })
+             handleToggle(todo._id, todo.isCompleted);
+            });  
             let title = document.createElement("h3");
             title.classList.add("ml-6")
             title.innerText = todo.title;
-            title.addEventListener("dblclick", (event) => {
-                console.log("hai");
-                let input = document.createElement("input");
-                let el = event.target;
-                input.value = el.innerText;
-                input.type = "text";
-                let parent = el.parentElement;
-                input.addEventListener("keydown", (e) => {
-                    if(e.keyCode === 13) {
-                        let updated = e.target.value;
-                        console.log(data);
-                        data["todo"].title = updated;
-                        console.log(data, todo._id);
-                        updateTodo(data, todo._id);
-                    }
-                })
-                 input.addEventListener("blur", (e) => {
-                    let updated = e.target.value;
-                    console.log(data);
-                    data["todo"].title = updated;
-                    console.log(data, todo._id);
-                    updateTodo(data, todo._id);
-                 })   
-
-                
-                parent.replaceChild(input, el);
-                
+            title.addEventListener("dblclick", (e) => {
+                updateTodo(e, todo._id);
             });
+                
+                
             let span = document.createElement("span");
             span.innerText = "❌";
             span.classList.add("ml-4", "block", "cursor-pointer");
@@ -65,14 +58,14 @@ function displayUI(datas) {
 }
 
 function addTodo(event) {
-    
-     console.log(event.keyCode)
-    if(event.keyCode === 13) {
-        rootElm.innerHTML = "";
+    if(event.keyCode === 13 && event.target.value.trim()) {
+        let data = {
+            todo: {
+                title: `${event.target.value}`,
+                isCompleted: false
+            }
+        }
         
-        data.todo.title = event.target.value;
-        data.todo.isCompleted = isTrue;
-        console.log(data);
         event.target.value = "";
         fetch(url, {
             method: "POST",
@@ -80,25 +73,52 @@ function addTodo(event) {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(data),
-        })
-        
-        main();
+        }).then(() => main());
         
     } 
     
 }
 
-function updateTodo(obj, id) {
+function updateTodo(event, id) {
+    var data = {todo:{}};
+    let input = document.createElement("input");
+                let el = event.target;
+                input.value = el.innerText;
+                input.type = "text";
+                let parent = el.parentElement;
+                input.addEventListener("keydown", (e) => {
+                    if(e.keyCode === 13 && e.target.value) {
+                        let data = {
+                            todo: {
+                                title: `${e.target.value}`,
+                            }
+                        }
+                        fetch(url + `/${id}`, {
+                            method: "PUT",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(data),
+                        }).then(() => main());
+                    }
+                })
+                 input.addEventListener("blur", (e) => {
+                    let data = {
+                        todo: {
+                            title: `${e.target.value}`,
+                        }
+                    }
+                    fetch(url + `/${id}`, {
+                        method: "PUT",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(data),
+                    }).then(() => main());
+                 })   
 
-    fetch(url + `/${id}`, {
-        method: "PUT",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(obj),
-    });
-
-    main();
+                parent.replaceChild(input, el);
+    
 
 }
 
@@ -109,9 +129,7 @@ function deleteTodo(id) {
             "Content-Type": "application/json"
         },
        
-    });
-
-    main();
+    }).then(() => main());
 }
 
 
