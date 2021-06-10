@@ -4,11 +4,14 @@
   "description": "",
   "main": "",
   "scripts": {
-    "test": "jest --passWithNoTests"
+    "test": "tailwindcss build src/style.css -o public/style.css"
   },
   "author": "AltCampus",
   "license": "GNU GPL V3",
   "dependencies": {
-    "jest": "^26.0.1"
+    "autoprefixer": "^10.2.6",
+    "jest": "^26.0.1",
+    "postcss": "^8.3.1",
+    "tailwindcss": "^2.1.4"
   }
 }
