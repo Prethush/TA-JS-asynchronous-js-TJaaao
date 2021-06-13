@@ -10,12 +10,14 @@
 </head>
 <body class="bg-blue-500">
     <h1 class="text-center text-3xl font-bold p-6">List of GOT books</h1>
-    <ul class="container flex flex-row flex-wrap justify-between">
+    <ul class="container flex flex-row flex-wrap justify-between bg-red-100 max-w-screen-lg mx-auto mb-8">
        
     </ul>
 
-    <div class="modal fixed top-12 overflow-auto bottom-12 left-12 right-12 bg-red-200 p-8 hidden">
-        <span class="close text-right block cursor-pointer">Close</span>
+    <div class="modal fixed top-12 overflow-auto bottom-12 left-12 right-12 bg-green-600 p-8 hidden rounded-xl">
+
+        <h2 class="text-center text-2xl font-bold mb-5">Characters List</h2>
+        <span class="close text-right cursor-pointer mb-4 absolute right-5 top-8">❌</span>
         <ul class="characters-data"></ul>
     </div>
     <script src="index.js"></script>
