@@ -1,12 +1,20 @@
 
-(function() {
+function init() {
 const ul = document.querySelector("ul");
 const modal = document.querySelector(".modal");
 const close = document.querySelector(".close");
 const charactersData = document.querySelector(".characters-data");
+const error = document.querySelector(".error");
+const main = document.querySelector(".main");
 
 /* <div class="donut"></div> */
 
+function handleErrorMessage(msg = `Something went wrong ❌`) {
+    main.style.display = "none";
+    error.innerText = msg;
+    error.style.display = "block";
+   
+}
 function handleSpinner(rootElm, status = false) {
     if(status) {
         rootElm.innerHTML = `<div class="donut"></div>`;
@@ -67,12 +75,17 @@ function displayUI(books) {
 
 function booksData() {
     handleSpinner(ul, true);
-    fetch(url).then((res) => res.json())
+    fetch(url).then((res) => {
+        if(res.ok) {
+            return res.json();
+        }
+        throw new Error("Reponse is not Ok");
+    })
     .then((booksData) =>displayUI(booksData))
+    .catch((error) => handleErrorMessage(error))
     .finally(() => handleSpinner(ul));
 }
         
-booksData();
 // Promise.all(books.map((book) => book).then(console.log));
 
 modal.addEventListener("load", (e) => {
@@ -80,6 +93,18 @@ modal.addEventListener("load", (e) => {
 modal.style.display = "none";
 });
 console.log(modal);
- 
-})(); 
 
+
+ 
+
+
+if(navigator.onLine) {
+    booksData();
+
+} else {
+    handleErrorMessage("Check your Internet Connection ❌");
+}
+
+}
+
+init();
